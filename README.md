@@ -1,5 +1,6 @@
 # less-mode #
 Major Emacs mode for editing [http://lesscss.org](Less) files.
+Inspired by [https://github.com/antonj/scss-mode](scss-mode).
 
 ## Installation ##
 
@@ -8,4 +9,4 @@ Major Emacs mode for editing [http://lesscss.org](Less) files.
 
 If you use [http://www.emacswiki.org/emacs/SmartCompile](smart-compile):
 
-    (add-to-list 'smart-compile-alist '(less-mode . "lessc %f"))
+    (add-to-list 'smart-compile-alist '(less-mode . (less-compile)))

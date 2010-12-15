@@ -19,13 +19,42 @@
 
 ;;; Code:
 
-(defconst scss-font-lock-keywords
+(require 'derived)
+(require 'compile)
+
+(defconst less-font-lock-keywords
   '(("@[^\s:;]+" . font-lock-constant-face)
     ("//.*$" . font-lock-comment-face)))
 
+(defgroup less nil
+  "Less mode"
+  :prefix "less-"
+  :group 'css)
+
+(defcustom less-lessc-command "lessc --no-color"
+  "Less compiler command"
+  :group 'less)
+
+(defcustom less-compile-at-save t
+  "If not nil, Less buffers will be compiled on each save"
+  :type 'boolean
+  :group 'less)
+
+(defun less-compile ()
+  "Compiles the current buffer"
+  (interactive)
+  (compile (concat less-lessc-command " " buffer-file-name)))
+
+(defun less-compile-maybe ()
+  "Runs `less-compile' on if `less-compile-at-save' is not nil"
+  (if less-compile-at-save
+      (less-compile)))
+
 (define-derived-mode less-mode css-mode "Less"
   "Major mode for editing Less files, http://lesscss.org"
-  (font-lock-add-keywords nil scss-font-lock-keywords))
+  (css-mode-hook)
+  (font-lock-add-keywords nil less-font-lock-keywords)
+  (add-hook 'after-save-hook 'less-compile-maybe nil t))
 
 (provide 'less-mode)
 ;;; less-mode.el ends here
