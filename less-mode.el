@@ -40,6 +40,11 @@
   :type 'boolean
   :group 'less)
 
+(defcustom less-mode-hook nil
+  "Hook run when entering Less mode"
+  :type 'hook
+  :group 'less)
+
 (defun less-compile ()
   "Compiles the current buffer"
   (interactive)
@@ -52,7 +57,7 @@
 
 (define-derived-mode less-mode css-mode "Less"
   "Major mode for editing Less files, http://lesscss.org"
-  (css-mode-hook)
+  (run-hooks 'css-mode-hook)
   (font-lock-add-keywords nil less-font-lock-keywords)
   (add-hook 'after-save-hook 'less-compile-maybe nil t))
 
