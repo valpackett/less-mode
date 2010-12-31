@@ -10,3 +10,5 @@ Inspired by [scss-mode](https://github.com/antonj/scss-mode).
 If you use [smart-compile](http://www.emacswiki.org/emacs/SmartCompile):
 
     (add-to-list 'smart-compile-alist '(less-mode . (less-compile)))
+
+If you use [Flymake](http://www.emacswiki.org/emacs/FlyMake), it will work automatically.

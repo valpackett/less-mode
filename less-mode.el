@@ -55,9 +55,28 @@
   (if less-compile-at-save
       (less-compile)))
 
+(defun flymake-less-init ()
+  (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                     'flymake-create-temp-inplace))
+         (local-file (file-relative-name
+                      temp-file
+                      (file-name-directory buffer-file-name))))
+    (list "lessc" (list "--no-color" local-file))))
+
+(when (featurep 'flymake)
+  (add-to-list 'flymake-allowed-file-name-masks
+               '("\\.less$" flymake-less-init))
+  (add-to-list 'flymake-err-line-patterns
+               '("! \\(.*\\): on line \\([0-9]+\\): \\(.*\\)"
+                 nil 2 nil 3))
+  (add-to-list 'flymake-err-line-patterns
+               '("! \\(.*\\): \\(.*\\)"
+                 nil nil nil 2)))
+
 (define-derived-mode less-mode css-mode "Less"
   "Major mode for editing Less files, http://lesscss.org"
   (run-hooks 'css-mode-hook)
+  (when (featurep 'flymake) (flymake-mode t))
   (font-lock-add-keywords nil less-font-lock-keywords)
   (add-hook 'after-save-hook 'less-compile-maybe nil t))
 
