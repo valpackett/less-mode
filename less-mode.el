@@ -23,8 +23,7 @@
 (require 'compile)
 
 (defconst less-font-lock-keywords
-  '(("@[^\s:;]+" . font-lock-constant-face)
-    ("//.*$" . font-lock-comment-face)))
+  '(("@[^\s:;]+" . font-lock-constant-face)))
 
 (defgroup less nil
   "Less mode"
@@ -78,6 +77,11 @@
   (run-hooks 'css-mode-hook)
   (when (featurep 'flymake) (flymake-mode t))
   (font-lock-add-keywords nil less-font-lock-keywords)
+  ;; Add the single-line comment syntax ('//', ends with newline)
+  ;; as comment style 'b' (see "Syntax Flags" in elisp manual)
+  (modify-syntax-entry ?/ ". 124" css-mode-syntax-table)
+  (modify-syntax-entry ?* ". 23b" css-mode-syntax-table)
+  (modify-syntax-entry ?\n ">" css-mode-syntax-table)
   (add-hook 'after-save-hook 'less-compile-maybe nil t))
 
 (provide 'less-mode)
